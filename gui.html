@@ -1,0 +1,78 @@
+
+
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<style>
+table,th,td {
+  border : 2px solid black;
+  border-collapse: collapse;
+}
+th,td {
+  padding: 5px;
+}
+</style>
+
+
+
+
+
+
+
+<style>
+.highlight
+{
+background-color:red;
+border : 2px solid black;
+  border-collapse: collapse;
+}
+table,th,td {
+  border : 2px solid black;
+  border-collapse: collapse;
+}
+th,td {
+  padding: 5px;
+}
+</style>
+
+<div id="inputText">
+
+<br><br>
+<button type="button" onclick="loadXMLDoc()">Get my VM stats</button>
+
+
+<table id="demo"></table>
+</table>
+
+<script>
+function loadXMLDoc() {
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      myFunction(this);
+    }
+  };
+  xmlhttp.open("GET", "vmstat_output.xml", true);
+  xmlhttp.send();
+}
+function myFunction(xml) {
+    var x, i, xmlDoc, txt;
+    xmlDoc = xml.responseXML;
+    txt = "\t<tr>\n\t\t<th>Resource</th>\n\t\t<th>State</th>\n\t</tr>";
+    x = xmlDoc.getElementsByTagName('resource');
+    for (i = 0; i < x.length; i++) {
+    	if (x[i].getAttribute('state') == 'poweredOff') {
+    		txt += "\n\t<tr>\n\t\t<td>" + x[i].getAttribute('name') + "</td>\n\t\t<td class='highlight'>" + x[i].getAttribute ('state') + "</td>\n\t</tr>";
+    	} else if ((x[i].getAttribute('state') == 'poweredOn')) {
+			txt += "\n\t<tr>\n\t\t<td>" + x[i].getAttribute('name') + "</td>\n\t\t<td>" + x[i].getAttribute ('state') + "</td>\n\t</tr>";
+    	}
+
+    }
+    document.getElementById("demo").innerHTML = txt;
+}
+</script>
+</div>
+</body>
+</html>
